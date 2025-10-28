@@ -1,0 +1,8 @@
+{
+  "username": "test-user-docker-001",
+  "email": "test-docker@example.com",
+  "metadata": {
+    "source": "docker-test-suite",
+    "created": "auto"
+  }
+}

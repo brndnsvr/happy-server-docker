@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+  postgres:
+    ports:
+      - "5432:5432"
+    environment:
+      # Keep default from docker-compose.yml
+
+  redis:
+    ports:
+      - "6379:6379"
+
+  minio:
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+  happy-server:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ..:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+      - "9090:9090"
+      - "9229:9229"  # Node debugger port
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: happy-pgadmin
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@happy.local}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+    ports:
+      - "5050:80"
+    networks:
+      - happy-network
+    restart: unless-stopped
+
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    container_name: happy-redisinsight
+    depends_on:
+      - redis
+    ports:
+      - "8001:8001"
+    networks:
+      - happy-network
+    restart: unless-stopped

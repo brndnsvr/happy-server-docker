@@ -1,0 +1,13 @@
+{
+  "tag": "test-session-docker-integration",
+  "metadata": {
+    "client": "docker-test-suite",
+    "version": "1.0.0",
+    "purpose": "integration-testing",
+    "ephemeral": true
+  },
+  "data": {
+    "test": true,
+    "timestamp": "auto"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "status": "ok",
+  "timestamp": "<number>",
+  "version": "<string>",
+  "services": {
+    "database": "connected",
+    "redis": "connected",
+    "storage": "connected"
+  }
+}
