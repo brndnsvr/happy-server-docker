@@ -256,10 +256,37 @@ cleanup_test_data() {
     # This can be extended by individual test files
 }
 
+# Check if container exists (running or stopped)
+container_exists() {
+    local container_name="$1"
+    docker ps -a --format '{{.Names}}' | grep -q "^${container_name}$"
+}
+
+# Get container health status
+get_container_status() {
+    local container_name="$1"
+    docker inspect --format='{{.State.Health.Status}}' "$container_name" 2>/dev/null || echo "no healthcheck"
+}
+
+# Log passing test
+log_pass() {
+    local message="$1"
+    echo -e "${GREEN}✓ PASS${NC}: $message"
+    ((TESTS_PASSED++))
+}
+
+# Log failing test
+log_fail() {
+    local message="$1"
+    echo -e "${RED}✗ FAIL${NC}: $message"
+    ((TESTS_FAILED++))
+}
+
 # Export functions
 export -f log_info log_success log_error log_warn log_skip
 export -f run_test skip_test
 export -f assert_equals assert_not_empty assert_contains assert_command_success
 export -f is_container_running wait_for_container wait_for_healthy get_container_logs exec_in_container
 export -f wait_for_port http_get http_post
+export -f container_exists get_container_status log_pass log_fail
 export -f print_test_summary cleanup_test_data
